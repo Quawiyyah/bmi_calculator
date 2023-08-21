@@ -1,0 +1,170 @@
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c178d;
+    }
+
+    h2 {
+      color: #2c178d;
+    }
+    
+    h3 {
+      color: #2c178d;
+    }
+    
+
+    .container {
+      width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #cccccc;
+      background-color: #ffffff;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      width: 150px;
+      font-weight: bold;
+    }
+
+    .form-group input {
+      width: 200px;
+      padding: 5px;
+      border: 1px solid #999999;
+    }
+
+    .form-group select {
+      width: 100px;
+      padding: 5px;
+      border: 1px solid #999999;
+    }
+
+    .form-group button {
+      width: 100px;
+      padding: 10px;
+      border: none;
+      background-color: #333333;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #333333;
+    }
+  </style>
+</head>
+<body>
+  <h1>  Q's BMI Calculator</h1>
+
+  <h2>Hello there, Welcome to Q's BMI Calculator </h2>
+   <h3>About BMI</h3>
+  <h3> Body mass index (BMI) is a measure of body fat based on height and weight that applies to adult men and women </h3>
+  <p> Calculate your BMI in few seconds and have an idea of your body's physiological state.</p>
+  <p>Enter your weight and height using standard measures.
+    Select "Compute BMI" and your BMI will appear below.</p>
+
+  <div class="container">
+    <div class="form-group">
+      <label for="height">Height:</label>
+      <input type="number" id="height" min="0" step="0.01" placeholder="Please enter your height in meters">
+      <select id="height-unit">
+        <option value="m">m</option>
+        <option value="cm">cm</option>
+        <option value="in">in</option>
+        <option value="ft">ft</option> 
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="weight">Weight:</label>
+      <input type="number" id="weight" min="0" step="0.01" placeholder="Please nter your weight in kilograms">
+      <select id="weight-unit">
+        <option value="kg">kg</option>
+        <option value="lb">lb</option>
+        <option value="st">st</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <button id="calculate">Compute BMI</button>
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    // Get the elements from the document
+    var height = document.getElementById("height");
+    var heightUnit = document.getElementById("height-unit");
+    var weight = document.getElementById("weight");
+    var weightUnit = document.getElementById("weight-unit");
+    var calculate = document.getElementById("calculate");
+    var result = document.getElementById("result");
+
+    // conversion factors
+    var meterFactor = {"m": 1, "cm": 0.01, "in": 0.0254, "ft": 0.3048};
+    var kilogramFactor = {"kg": 1, "lb": 0.4536, "st": 6.3503};
+
+    // BMI categories
+    var bmiCategories = [
+      {min: null, max: 18.5, color: "blue", text: "Underweight. Don't fret, your BMI can improve and return to normal. you  can learn about managing and maintaining a healthy weight here https://www.cdc.gov/healthyweight/effects/index.html "},
+      {min: 18.5, max: 25, color: "green", text: "Normal weight"},
+      {min: 25, max: 30, color: "orange", text: "Overweight. see some physical activities that can help     hit a healthy weight https://www.cdc.gov/healthyweight/calories/index.html "},
+      {min: 30, max: null, color: "red", text: "Obese. see some physical activities that can help     hit a healthy weight https://www.cdc.gov/healthyweight/calories/index.html "}
+    ];
+
+    // event listener to the calculate button
+    calculate.addEventListener("click", function() {
+      
+      // Get the input values and units
+      var heightValue = parseFloat(height.value);
+      var heightUnitValue = heightUnit.value;
+      
+      var weightValue = parseFloat(weight.value);
+      
+var weightUnitValue = weightUnit.value;
+
+// Check if the inputs are valid
+if (isNaN(heightValue) || isNaN(weightValue)) {
+  
+// error message to catch if user enters anything that's not a number
+result.innerHTML = "Please enter valid numbers for height and weight.";
+result.style.color = "black";
+} else {
+
+// Convert the inputs to meters and kilograms
+var heightInMeters = heightValue * meterFactor[heightUnitValue];
+var weightInKilograms = weightValue * kilogramFactor[weightUnitValue];
+
+// Calculate the BMI
+var bmi = weightInKilograms / (heightInMeters * heightInMeters);
+
+// Round the BMI to two decimal places
+bmi = bmi.toFixed(2);
+
+
+// Find the BMI category
+var bmiCategory = bmiCategories.find(function(category) {
+return (category.min === null || bmi >= category.min) && (category.max === null || bmi < category.max);
+});
+
+// Print the result
+result.innerHTML = "Your BMI is " + bmi + ". According to the World Health Organization, the calculated BMI hows that you are " + bmiCategory.text + ".";
+result.style.color = bmiCategory.color;
+}
+});
+</script>
+</body>
+</html>
